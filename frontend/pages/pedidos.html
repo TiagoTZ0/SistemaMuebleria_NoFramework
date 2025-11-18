@@ -1,0 +1,75 @@
+<div class="content-card">
+    <div class="page-header" style="margin-bottom: 1.5rem;">
+        <h1 style="color: var(--text-dark); font-size: 1.8rem; font-weight: 700; margin: 0;">Gestión de Pedidos</h1>
+        <button class="btn btn-primary" style="font-weight: 600; padding: 0.75rem 1.5rem; cursor: not-allowed; opacity: 0.6;">+ Nuevo Pedido</button>
+    </div>
+
+    <div class="filter-controls" style="margin-bottom: 1.5rem;">
+        <input type="text" placeholder="Buscar por ID de pedido..." class="filter-input" style="flex-grow: 1;">
+        <select class="filter-select">
+            <option value="">Todos los Estados</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="Procesando">Procesando</option>
+            <option value="Completado">Completado</option>
+            <option value="Cancelado">Cancelado</option>
+        </select>
+    </div>
+
+    <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+        <div style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 1.5rem;">Mostrando 4 pedidos</div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #EBF5FF;">
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">ID Pedido</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Cliente</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Fecha</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Total</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Estado</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem; color: var(--text-dark);">#1024</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">Juan Perez</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">18/11/2025</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 2,400.00</td>
+                    <td style="padding: 1rem;"><span style="background-color: #FFF3E0; color: #ff9800; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Pendiente</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Ver</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color); background-color: #f9f9f9;">
+                    <td style="padding: 1rem; color: var(--text-dark);">#1023</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">Maria Lopez</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">17/11/2025</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 1,599.80</td>
+                    <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Completado</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Ver</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem; color: var(--text-dark);">#1022</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">Carlos Sanchez</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">16/11/2025</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 3,650.00</td>
+                    <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Completado</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Ver</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color); background-color: #f9f9f9;">
+                    <td style="padding: 1rem; color: var(--text-dark);">#1021</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">Ana Martinez</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">15/11/2025</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 899.00</td>
+                    <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Completado</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Ver</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-top: 1rem; text-align: center;">Módulo en desarrollo - Funcionalidades adicionales próximamente</p>
+</div>
+
+<script>
+function loadPedidosPage() {
+    console.log('Página de Pedidos cargada');
+}
+</script>

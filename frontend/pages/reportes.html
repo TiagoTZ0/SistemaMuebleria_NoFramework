@@ -1,0 +1,63 @@
+<div class="content-card">
+    <div class="page-header" style="margin-bottom: 1.5rem;">
+        <h1 style="color: var(--text-dark); font-size: 1.8rem; font-weight: 700; margin: 0;">Reportes</h1>
+        <button class="btn btn-primary" style="font-weight: 600; padding: 0.75rem 1.5rem; cursor: not-allowed; opacity: 0.6;">📥 Descargar Excel</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: #EBF5FF; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--btn-primary-bg);">
+            <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">Ventas Este Mes</p>
+            <p style="color: var(--btn-primary-bg); font-size: 2rem; font-weight: 700; margin: 0;">S/ 8,650.30</p>
+        </div>
+        <div style="background: #E8F5E9; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #4caf50;">
+            <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">Pedidos Completados</p>
+            <p style="color: #4caf50; font-size: 2rem; font-weight: 700; margin: 0;">24</p>
+        </div>
+        <div style="background: #FFF3E0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff9800;">
+            <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">Productos Vendidos</p>
+            <p style="color: #ff9800; font-size: 2rem; font-weight: 700; margin: 0;">87</p>
+        </div>
+        <div style="background: #F3E5F5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #9c27b0;">
+            <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">Clientes Activos</p>
+            <p style="color: #9c27b0; font-size: 2rem; font-weight: 700; margin: 0;">15</p>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <h3 style="color: var(--text-dark); margin-bottom: 1rem; font-weight: 600;">Productos Más Vendidos</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #EBF5FF;">
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Producto</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Cantidad Vendida</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Ingresos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem; color: var(--text-dark);">Cama Queen "Ensueño"</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">12</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 25,200.00</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color); background-color: #f9f9f9;">
+                    <td style="padding: 1rem; color: var(--text-dark);">Escritorio Ejecutivo</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">8</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 7,192.00</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem; color: var(--text-dark);">Mesa Centro de Roble</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">15</td>
+                    <td style="padding: 1rem; color: var(--btn-primary-bg); font-weight: 600;">S/ 5,242.50</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-top: 1rem; text-align: center;">Módulo en desarrollo - Más reportes próximamente</p>
+</div>
+
+<script>
+function loadReportesPage() {
+    console.log('Página de Reportes cargada');
+}
+</script>

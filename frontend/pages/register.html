@@ -1,0 +1,34 @@
+<div class="auth-container">
+    <div class="form-container">
+        <h1>Crear Nueva Cuenta</h1>
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-grid form-group-span-2">
+                <div class="form-group">
+                    <label>Usuario:</label>
+                    <input type="text" id="regUsername" required placeholder="Elige un usuario">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="regEmail" required placeholder="Ingrese su email">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="regPassword" required placeholder="Ingrese una contraseña">
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña:</label>
+                    <input type="password" id="regPasswordConfirm" required placeholder="Confirme su contraseña">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <p style="color: var(--text-secondary-gray); margin-bottom: 0.5rem;">¿Ya tienes cuenta?</p>
+                <button type="button" class="btn btn-secondary" onclick="switchToLogin()">Ir a Login</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="assets/js/pages/login.js"></script>

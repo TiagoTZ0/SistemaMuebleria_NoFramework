@@ -1,0 +1,65 @@
+<div class="content-card">
+    <div class="page-header" style="margin-bottom: 1.5rem;">
+        <h1 style="color: var(--text-dark); font-size: 1.8rem; font-weight: 700; margin: 0;">Gestión de Clientes</h1>
+        <button class="btn btn-primary" style="font-weight: 600; padding: 0.75rem 1.5rem; cursor: not-allowed; opacity: 0.6;">+ Nuevo Cliente</button>
+    </div>
+
+    <div class="filter-controls" style="margin-bottom: 1.5rem;">
+        <input type="text" placeholder="Buscar por nombre o DNI..." class="filter-input" style="flex-grow: 1;">
+        <select class="filter-select">
+            <option value="">Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+        </select>
+    </div>
+
+    <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+        <div style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 1.5rem;">Mostrando 3 clientes</div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #EBF5FF;">
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Nombre</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">DNI</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Email</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Teléfono</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Estado</th>
+                    <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem; color: var(--text-dark);">Juan Perez García</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">12345678</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">juan@email.com</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">+51 987654321</td>
+                    <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Activo</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Editar</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color); background-color: #f9f9f9;">
+                    <td style="padding: 1rem; color: var(--text-dark);">Maria Lopez Martínez</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">87654321</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">maria@email.com</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">+51 912345678</td>
+                    <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Activo</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Editar</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem; color: var(--text-dark);">Carlos Sanchez López</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">11223344</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">carlos@email.com</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">+51 956789012</td>
+                    <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Activo</span></td>
+                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6;">Editar</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-top: 1rem; text-align: center;">Módulo en desarrollo - Funcionalidades adicionales próximamente</p>
+</div>
+
+<script>
+function loadClientesPage() {
+    console.log('Página de Clientes cargada');
+}
+</script>

@@ -1,0 +1,256 @@
+<div style="display: none;" id="formContainer">
+    <div style="background: var(--header-bg); padding: 2rem; border-radius: 8px 8px 0 0; margin-bottom: 0;">
+        <h2 style="color: white; font-size: 1.3rem; margin: 0 0 0.5rem 0; font-weight: 700;">Registrar Nuevo Producto</h2>
+        <button onclick="hideProductForm()" style="background: none; border: none; color: #ffb84d; cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600;">Volver a la lista</button>
+    </div>
+    
+    <div style="background: white; padding: 2rem; border-radius: 0 0 8px 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <form id="addProductForm" onsubmit="handleProductSubmit(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Nombre del Producto *</label>
+                    <input type="text" name="descripcion" placeholder="Nombre del producto" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                </div>
+                <div>
+                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">SKU *</label>
+                    <input type="text" name="sku" placeholder="SKU único" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                </div>
+                <div>
+                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Marca *</label>
+                    <select name="marca" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                        <option value="">Seleccione una marca</option>
+                        <option value="DormiFlex">DormiFlex</option>
+                        <option value="OffiTop">OffiTop</option>
+                        <option value="CasaHome">CasaHome</option>
+                        <option value="MaderaVira">MaderaVira</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Categoría *</label>
+                    <select name="categoria" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                        <option value="">Seleccione una categoría</option>
+                        <option value="Camas">Camas</option>
+                        <option value="Mesas">Mesas</option>
+                        <option value="Sillas">Sillas</option>
+                        <option value="Estantes">Estantes</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Precio (S/) *</label>
+                    <input type="number" name="precio" placeholder="0.00" step="0.01" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                </div>
+                <div>
+                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Stock Actual *</label>
+                    <input type="number" name="stockActual" placeholder="0" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">URL de la Imagen</label>
+                <input type="text" name="imagen" placeholder="https://ejemplo.com/imagen.jpg" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button type="button" onclick="hideProductForm()" class="btn btn-secondary" style="padding: 0.75rem 2rem; font-weight: 600;">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; font-weight: 600;">Guardar Producto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="listContainer">
+    <div class="page-header" style="margin-bottom: 1.5rem;">
+        <h1 style="color: var(--text-dark); font-size: 1.8rem; font-weight: 700; margin: 0;">Gestión de Productos</h1>
+        <button class="btn btn-primary" onclick="showProductForm()" style="font-weight: 600; padding: 0.75rem 1.5rem;">+ Agregar Producto</button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-controls" style="margin-bottom: 1.5rem;">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre, SKU, marca..." class="filter-input" onkeyup="filterProducts()" style="flex-grow: 1;">
+        <select id="marcaFilter" class="filter-select" onchange="filterProducts()">
+            <option value="">Todas las Marcas</option>
+            <option value="DormiFlex">DormiFlex</option>
+            <option value="OffiTop">OffiTop</option>
+            <option value="CasaHome">CasaHome</option>
+            <option value="MaderaVira">MaderaVira</option>
+        </select>
+        <select id="categoriaFilter" class="filter-select" onchange="filterProducts()">
+            <option value="">Todas las Categorías</option>
+            <option value="Camas">Camas</option>
+            <option value="Mesas">Mesas</option>
+            <option value="Sillas">Sillas</option>
+            <option value="Estantes">Estantes</option>
+        </select>
+        <select id="sortFilter" class="filter-select" onchange="filterProducts()">
+            <option value="name-asc">Ordenar por Nombre (A-Z)</option>
+            <option value="name-desc">Ordenar por Nombre (Z-A)</option>
+            <option value="price-asc">Ordenar por Precio (↓)</option>
+            <option value="price-desc">Ordenar por Precio (↑)</option>
+            <option value="stock-asc">Ordenar por Stock (↓)</option>
+            <option value="stock-desc">Ordenar por Stock (↑)</option>
+        </select>
+    </div>
+
+    <!-- Grid de Productos -->
+    <div class="content-card">
+        <div id="productCountHeader" style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 1.5rem;"></div>
+        <div class="product-grid" id="productosGrid">
+        </div>
+    </div>
+</div>
+
+<script>
+let allProductos = [];
+
+function loadProductosPage() {
+    loadProductos();
+}
+
+async function loadProductos() {
+    try {
+        const response = await fetch('http://localhost:8000/api/productos');
+        if (!response.ok) throw new Error('Error en servidor');
+        const data = await response.json();
+        allProductos = data;
+        filterProducts();
+    } catch (error) {
+        console.error('Error:', error);
+        // Datos de prueba local si no conecta al servidor
+        allProductos = [
+            { id: 1, descripcion: 'Cama King Size', sku: 'SKU001', marca: 'DormiFlex', categoria: 'Camas', precio: 1200.00, stockActual: 5, imagen: '' },
+            { id: 2, descripcion: 'Mesa de Comedor', sku: 'SKU002', marca: 'CasaHome', categoria: 'Mesas', precio: 350.00, stockActual: 8, imagen: '' },
+            { id: 3, descripcion: 'Silla de Oficina', sku: 'SKU003', marca: 'OffiTop', categoria: 'Sillas', precio: 180.00, stockActual: 12, imagen: '' }
+        ];
+        filterProducts();
+    }
+}
+
+function showProductForm() {
+    document.getElementById('formContainer').style.display = 'block';
+    document.getElementById('listContainer').style.display = 'none';
+    document.getElementById('addProductForm').reset();
+}
+
+function hideProductForm() {
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('listContainer').style.display = 'block';
+}
+
+function filterProducts() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const marca = document.getElementById('marcaFilter').value;
+    const categoria = document.getElementById('categoriaFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+
+    let filtered = allProductos.filter(p => {
+        const matchSearch = !search || p.descripcion.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search) || p.marca.toLowerCase().includes(search);
+        const matchMarca = !marca || p.marca === marca;
+        const matchCategoria = !categoria || p.categoria === categoria;
+        return matchSearch && matchMarca && matchCategoria;
+    });
+
+    if (sort === 'name-asc') filtered.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
+    else if (sort === 'name-desc') filtered.sort((a, b) => b.descripcion.localeCompare(a.descripcion));
+    else if (sort === 'price-asc') filtered.sort((a, b) => a.precio - b.precio);
+    else if (sort === 'price-desc') filtered.sort((a, b) => b.precio - a.precio);
+    else if (sort === 'stock-asc') filtered.sort((a, b) => a.stockActual - b.stockActual);
+    else if (sort === 'stock-desc') filtered.sort((a, b) => b.stockActual - a.stockActual);
+
+    renderProductos(filtered);
+}
+
+function renderProductos(productos) {
+    const grid = document.getElementById('productosGrid');
+    const countHeader = document.getElementById('productCountHeader');
+    
+    countHeader.textContent = `Mostrando ${productos.length} productos`;
+    
+    if (productos.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-secondary-gray); text-align: center; padding: 2rem; grid-column: 1 / -1;">No hay productos que coincidan con los filtros</p>';
+        return;
+    }
+
+    grid.innerHTML = productos.map(p => `
+        <div class="product-card">
+            <div class="product-image" style="background: #f5f5f5; height: 200px; border-radius: 6px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: #999;">
+                ${p.imagen ? `<img src="${p.imagen}" style="max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 6px;">` : 'Sin imagen'}
+            </div>
+            <div class="product-info">
+                <p class="product-brand" style="color: var(--btn-primary-bg); font-size: 0.85rem; font-weight: 600; margin: 0 0 0.25rem 0;">${p.marca}</p>
+                <p class="product-sku" style="color: var(--text-secondary-gray); font-size: 0.8rem; margin: 0 0 0.5rem 0;">SKU: ${p.sku}</p>
+                <h3 class="product-name" style="color: var(--text-dark); font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0;">${p.descripcion}</h3>
+                <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span class="product-stock" style="color: var(--text-secondary-gray); font-size: 0.9rem;">Stock: ${p.stockActual}</span>
+                    <span class="product-price" style="color: var(--btn-primary-bg); font-weight: 700; font-size: 1.1rem;">S/ ${p.precio.toFixed(2)}</span>
+                </div>
+                <div class="product-actions" style="display: flex; gap: 0.5rem;">
+                    <button onclick="editProduct(${p.id})" style="flex: 1; background: none; border: none; color: var(--btn-primary-bg); font-weight: 600; cursor: pointer; padding: 0.5rem; border-radius: 4px; font-size: 0.9rem;">Modificar</button>
+                    <button onclick="deleteProduct(${p.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 0.5rem; border-radius: 4px; font-size: 1.2rem;">🗑️</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function handleProductSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const producto = {
+        descripcion: formData.get('descripcion'),
+        sku: formData.get('sku'),
+        marca: formData.get('marca'),
+        categoria: formData.get('categoria'),
+        precio: parseFloat(formData.get('precio')),
+        stockActual: parseInt(formData.get('stockActual')),
+        imagen: formData.get('imagen'),
+        codigoBarras: formData.get('sku'),
+        stockMinimo: 5,
+        fechaCreacion: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch('http://localhost:8000/api/productos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(producto)
+        });
+        
+        if (response.ok) {
+            showAlert('Producto agregado exitosamente', 'success');
+            hideProductForm();
+            loadProductos();
+        } else {
+            showAlert('Error al agregar el producto', 'danger');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('Error al agregar el producto', 'danger');
+    }
+}
+
+async function deleteProduct(id) {
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+        try {
+            const response = await fetch(`http://localhost:8000/api/productos/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                showAlert('Producto eliminado', 'success');
+                loadProductos();
+            } else {
+                showAlert('Error al eliminar', 'danger');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert('Error al eliminar', 'danger');
+        }
+    }
+}
+
+function editProduct(id) {
+    const producto = allProductos.find(p => p.id === id);
+    if (producto) {
+        showAlert('Edición de productos en desarrollo', 'info');
+    }
+}
+</script>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Mueblería</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="app-container" id="appContainer">
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#home" class="nav-link active" onclick="navigateTo('home'); return false;"><span class="nav-emoji">🏠</span><span class="nav-text">Home</span></a></li>
+                    <li class="nav-item"><a href="#productos" class="nav-link" onclick="navigateTo('productos'); return false;"><span class="nav-emoji">📦</span><span class="nav-text">Productos</span></a></li>
+                    <li class="nav-item"><a href="#clientes" class="nav-link" onclick="navigateTo('clientes'); return false;"><span class="nav-emoji">👥</span><span class="nav-text">Clientes</span></a></li>
+                    <li class="nav-item"><a href="#pedidos" class="nav-link" onclick="navigateTo('pedidos'); return false;"><span class="nav-emoji">📋</span><span class="nav-text">Pedidos</span></a></li>
+                    <li class="nav-item"><a href="#reportes" class="nav-link" onclick="navigateTo('reportes'); return false;"><span class="nav-emoji">📊</span><span class="nav-text">Reportes</span></a></li>
+                    <li class="nav-item admin-link" id="adminLink" style="display:none;">
+                        <a href="#admin" class="nav-link" onclick="navigateTo('admin'); return false;"><span class="nav-emoji">⚙️</span><span class="nav-text">Gestión de Usuarios</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="main-content">
+            <header class="header" id="header">
+                <div class="header-logo">G&M</div>
+                <div class="header-user">
+                    <span id="userName">Invitado</span>
+                    <button class="logout-btn" onclick="logout()" title="Cerrar Sesión">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area" id="contentArea">
+                <!-- El contenido se carga aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <div id="alerts-container"></div>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/router.js"></script>
+    <script src="assets/js/pages/login.js"></script>
+    <script src="assets/js/pages/productos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const app = new App();
+            if (app.checkAuth()) {
+                showAuthUI();
+                navigateTo('home');
+            } else {
+                hideAuthUI();
+                navigateTo('login');
+            }
+        });
+
+        function showAuthUI() {
+            document.getElementById('sidebar').style.display = 'flex';
+            document.getElementById('header').style.display = 'flex';
+        }
+
+        function hideAuthUI() {
+            document.getElementById('sidebar').style.display = 'none';
+            document.getElementById('header').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

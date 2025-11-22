@@ -54,6 +54,8 @@ function toggleImageInput(context, type) {
 
 // 📌 Mapeo de Proveedor 
 function getProveedorName(id) {
+    if (!id || parseInt(id) === 0) return 'N/A';
+    
     const idNum = parseInt(id); 
     if (isNaN(idNum)) return 'Desconocido';
 
@@ -62,13 +64,14 @@ function getProveedorName(id) {
         case 2: return 'OffiTop';
         case 3: return 'CasaHome';
         case 4: return 'MaderaVira';
-        // AÑADIR OTROS IDS DE PROVEEDOR AQUÍ si existen en la BD
         default: return 'Desconocido'; 
     }
 }
 
-// 📌 Mapeo de Categoría (Para filtros y debug)
+// 📌 Mapeo de Categoría 
 function getCategoriaName(id) {
+    if (!id || parseInt(id) === 0) return 'N/A';
+    
     const idNum = parseInt(id); 
     if (isNaN(idNum)) return 'Desconocido';
 
@@ -81,7 +84,7 @@ function getCategoriaName(id) {
     }
 }
 
-// --- CARGA DE DATOS CON LOADER ---
+// --- CARGA DE DATOS CON LOADER (CORRECCIÓN API) ---
 async function loadProductos() {
     const grid = document.getElementById('productosGrid');
     const countHeader = document.getElementById('productCountHeader');
@@ -96,8 +99,9 @@ async function loadProductos() {
     countHeader.innerHTML = ''; 
 
     try {
-        const response = await fetch('http://localhost:8000/api/productos');
-        if (!response.ok) throw new Error('Error en servidor');
+        // 🚨 CORRECCIÓN: USAMOS LA RUTA RELATIVA '/api/productos' en lugar de localhost
+        const response = await fetch('/api/productos'); 
+        if (!response.ok) throw new Error('Error al conectar con la API del servidor');
         
         const data = await response.json();
         allProductos = data;
@@ -111,7 +115,7 @@ async function loadProductos() {
         grid.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #dc3545;">
                 <i class="fas fa-exclamation-circle" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <p style="font-size: 1.2rem;">No se pudo cargar el inventario. Asegúrate que el Backend esté corriendo.</p>
+                <p style="font-size: 1.2rem;">No se pudo cargar el inventario. (Error de API)</p>
                 <button onclick="loadProductos()" class="btn btn-secondary" style="margin-top:1rem; cursor: pointer;">
                     <i class="fas fa-sync"></i> Reintentar
                 </button>
@@ -127,7 +131,6 @@ function toggleFilters() {
     container.style.display = (container.style.display === 'none' || container.style.display === '') ? 'flex' : 'none';
 }
 
-// 📌 RENDERIZADO CORREGIDO: Muestra el Proveedor en la etiqueta principal.
 function renderProductos(productos) {
     const grid = document.getElementById('productosGrid');
     const countHeader = document.getElementById('productCountHeader');
@@ -148,12 +151,8 @@ function renderProductos(productos) {
             imageContent = `<div class="placeholder-text">${shortTitle}</div>`;
         }
 
-        const idProveedor = p.id_proveedor || null; 
-        // 🚨 ESTO ES EL TEXTO AZUL: Nombre del Proveedor mapeado
+        const idProveedor = p.id_proveedor; 
         const proveedorDisplay = getProveedorName(idProveedor) || 'N/A';
-
-        // Opcional: Si quieres mostrar la Categoría en otra parte (ej. en el título h3), usa:
-        // const categoriaDisplay = getCategoriaName(p.categoria_id); 
         
         return `
         <div class="product-card" onclick="openProductDetail(${p.id})">
@@ -205,7 +204,7 @@ function filterProducts() {
     renderProductos(filtered);
 }
 
-// --- CRUD functions (se mantienen igual) ---
+// --- CRUD functions (CORRECCIÓN API) ---
 
 function showProductForm() {
     document.getElementById('formContainer').style.display = 'flex';
@@ -242,7 +241,8 @@ async function handleProductSubmit(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:8000/api/productos', {
+        // 🚨 CORRECCIÓN: USAMOS RUTA RELATIVA
+        const response = await fetch('/api/productos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(producto)
@@ -329,11 +329,12 @@ async function handleUpdate(e) {
         stock: parseInt(document.getElementById('editStock').value), 
         stock_minimo: parseInt(document.getElementById('editStockMin').value),
         descripcion: document.getElementById('editDescripcion').value,
-        imagen: finalImg
+        imagen: finalImage
     };
 
     try {
-        const res = await fetch(`http://localhost:8000/api/productos/${currentEditId}`, {
+        // 🚨 CORRECCIÓN: USAMOS RUTA RELATIVA
+        const res = await fetch(`/api/productos/${currentEditId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -349,7 +350,8 @@ async function handleUpdate(e) {
 async function deleteFromModal() {
     if(!confirm("¿Estás seguro? Esta acción no se puede deshacer.")) return;
     try {
-        const res = await fetch(`http://localhost:8000/api/productos/${currentEditId}`, { method: 'DELETE' });
+        // 🚨 CORRECCIÓN: USAMOS RUTA RELATIVA
+        const res = await fetch(`/api/productos/${currentEditId}`, { method: 'DELETE' });
         if (res.ok) {
             alert("Eliminado");
             closeDetalle();

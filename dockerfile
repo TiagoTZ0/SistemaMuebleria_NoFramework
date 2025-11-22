@@ -2,20 +2,18 @@
 FROM python:3.11-slim
 
 # Instala las dependencias de construcción necesarias para PostgreSQL
-# Esto reemplaza el comando fallido apt-get en Render
+# Esto se hace usando apt-get dentro del contenedor, donde sí está permitido.
 RUN apt-get update && apt-get install -y build-essential libpq-dev
 
-# Establece el directorio de trabajo
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
-# Copia todo el contenido del repositorio al contenedor
+# Copia todo el contenido del repositorio a /usr/src/app
 COPY . .
 
-# Instala las dependencias de Python (usando la versión binaria)
-RUN pip install --no-cache-dir -r requerimientos.txt
+# Instala las dependencias de Python (Asegurándonos que el nombre es CORRECTO)
+RUN pip install --no-cache-dir -r requirements.txt
 
-# El proceso escucha en el puerto definido por Render
-EXPOSE $PORT
-
-# Comando para iniciar la aplicación (Asegúrate de que esta ruta sea correcta)
+# Comando para iniciar la aplicación, usando la ruta correcta al servidor
+# Render busca server.py dentro de backend/
 CMD ["python", "backend/server.py"]

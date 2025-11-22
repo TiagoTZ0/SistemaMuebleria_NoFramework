@@ -10,13 +10,12 @@
             <option value="">Todos los Roles</option>
             <option value="Admin">Admin</option>
             <option value="Vendedor">Vendedor</option>
-            <option value="Cliente">Cliente</option>
+            <option value="Despachador">Despachador</option>
         </select>
     </div>
 
-    <div style="background: white; padding: 1.5rem; border-radius: 8px;">
-        <div style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 1.5rem;">Mostrando 3 usuarios</div>
-        <table style="width: 100%; border-collapse: collapse;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
             <thead>
                 <tr style="background-color: #EBF5FF;">
                     <th style="padding: 1rem; text-align: left; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border-color);">Usuario</th>
@@ -32,34 +31,47 @@
                     <td style="padding: 1rem; color: var(--text-dark);">bruno@mail.com</td>
                     <td style="padding: 1rem;"><span style="background-color: #F3E5F5; color: #9c27b0; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Admin</span></td>
                     <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Activo</span></td>
-                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6; margin-right: 0.5rem;">Editar</button><button style="background: none; border: none; color: var(--danger); cursor: not-allowed; opacity: 0.6;">🗑️</button></td>
+                    <td style="padding: 1rem;">
+                        <button style="background: none; border: none; color: var(--btn-primary-bg); font-weight: 600; cursor: pointer; margin-right: 10px;">Editar</button>
+                    </td>
                 </tr>
+                
                 <tr style="border-bottom: 1px solid var(--border-color); background-color: #f9f9f9;">
                     <td style="padding: 1rem; color: var(--text-dark);">Carlos</td>
                     <td style="padding: 1rem; color: var(--text-dark);">carlos@mail.com</td>
                     <td style="padding: 1rem;"><span style="background-color: #EBF5FF; color: var(--btn-primary-bg); padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Vendedor</span></td>
                     <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Activo</span></td>
-                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6; margin-right: 0.5rem;">Editar</button><button style="background: none; border: none; color: var(--danger); cursor: not-allowed; opacity: 0.6;">🗑️</button></td>
+                    <td style="padding: 1rem;">
+                        <button style="background: none; border: none; color: var(--btn-primary-bg); font-weight: 600; cursor: pointer; margin-right: 10px;">Editar</button>
+                        <button style="background: none; border: none; color: var(--danger); cursor: pointer;">🗑️</button>
+                    </td>
                 </tr>
+
                 <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 1rem; color: var(--text-dark);">Ana</td>
-                    <td style="padding: 1rem; color: var(--text-dark);">ana@mail.com</td>
-                    <td style="padding: 1rem;"><span style="background-color: #EBF5FF; color: var(--btn-primary-bg); padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Vendedor</span></td>
+                    <td style="padding: 1rem; color: var(--text-dark);">Jhon</td>
+                    <td style="padding: 1rem; color: var(--text-dark);">jhon@mail.com</td>
+                    <td style="padding: 1rem;"><span style="background-color: #FFF3E0; color: #ff9800; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Despachador</span></td>
                     <td style="padding: 1rem;"><span style="background-color: #E8F5E9; color: #4caf50; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">Activo</span></td>
-                    <td style="padding: 1rem;"><button style="background: none; border: none; color: var(--btn-primary-bg); cursor: not-allowed; font-weight: 600; text-decoration: underline; opacity: 0.6; margin-right: 0.5rem;">Editar</button><button style="background: none; border: none; color: var(--danger); cursor: not-allowed; opacity: 0.6;">🗑️</button></td>
+                    <td style="padding: 1rem;">
+                        <button style="background: none; border: none; color: var(--btn-primary-bg); font-weight: 600; cursor: pointer; margin-right: 10px;">Editar</button>
+                        <button style="background: none; border: none; color: var(--danger); cursor: pointer;">🗑️</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-    <p style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-top: 1rem; text-align: center;">Módulo en desarrollo - Funcionalidades adicionales próximamente</p>
 </div>
 
 <script>
 function loadAdminPage() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user.role !== 'Admin') {
-        document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><p style="color: red; font-weight: 600;">Acceso denegado: Solo administradores pueden acceder a esta sección</p></div>';
+        document.getElementById('contentArea').innerHTML = `
+            <div style="text-align: center; padding: 4rem;">
+                <h2 style="color: var(--danger);">Acceso Restringido</h2>
+                <p>Solo los administradores pueden ver esta página.</p>
+            </div>
+        `;
     }
 }
 </script>

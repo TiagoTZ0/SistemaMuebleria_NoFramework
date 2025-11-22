@@ -1,64 +1,36 @@
+// Simulación: Mapeo de Rol -> Usuario Específico
+const identities = {
+    'Admin': { name: 'Bruno', email: 'bruno@mail.com' },
+    'Vendedor': { name: 'Carlos', email: 'carlos@mail.com' },
+    'Despachador': { name: 'Jhon', email: 'jhon@mail.com' }
+};
+
 function handleLogin(event) {
     event.preventDefault();
-
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
-
-    // Mock authentication
-    if (username && password && role) {
-        const user = {
-            id: 1,
-            name: username,
-            role: role,
-            email: `${username}@gmail.com`
-        };
-
-        app.setCurrentUser(user);
-        showAuthUI();
-        navigateTo('home');
-        showAlert(`¡Bienvenido ${username}!`, 'success');
-    } else {
-        showAlert('Por favor completa todos los campos', 'danger');
+    
+    const roleSelect = document.getElementById('role');
+    const selectedRole = roleSelect.value;
+    const usernameTyped = document.getElementById('username').value;
+    const passwordTyped = document.getElementById('password').value;
+    
+    if (!selectedRole) {
+        alert("Por favor seleccione un rol.");
+        return;
     }
-}
-
-function switchToRegister() {
-    navigateTo('register');
-}
-
-function handleRegister(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('regUsername').value;
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
-    const passwordConfirm = document.getElementById('regPasswordConfirm').value;
-
-    if (!username || !email || !password || !passwordConfirm) {
-        showAlert('Por favor completa todos los campos', 'danger');
+    if (!usernameTyped || !passwordTyped) {
+        alert("Por favor complete usuario y contraseña.");
         return;
     }
 
-    if (password !== passwordConfirm) {
-        showAlert('Las contraseñas no coinciden', 'danger');
-        return;
-    }
-
-    // Crear usuario
-    const user = {
-        id: Math.floor(Math.random() * 1000),
-        name: username,
-        email: email,
-        role: 'Vendedor'
+    // SIMULACIÓN: Login exitoso forzando la identidad del rol
+    const identity = identities[selectedRole];
+    
+    const user = { 
+        username: identity.name, 
+        email: identity.email,
+        role: selectedRole 
     };
 
-    app.setCurrentUser(user);
-    showAuthUI();
-    navigateTo('home');
-    showAlert(`¡Bienvenido ${username}! Tu cuenta ha sido creada`, 'success');
-}
-
-function switchToLogin() {
-    navigateTo('login');
+    localStorage.setItem('user', JSON.stringify(user));
+    window.location.reload();
 }

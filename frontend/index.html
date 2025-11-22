@@ -3,56 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Mueblería</title>
+    <title>Sistema de Mueblería G&M</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    
+    <div id="alerts-container"></div>
+
     <div class="app-container" id="appContainer">
-        <aside class="sidebar" id="sidebar">
-            <nav class="sidebar-nav">
+        
+        <aside class="sidebar" id="sidebar" style="display: none;">
+            <nav class="sidebar-nav" style="width: 100%;">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="#home" class="nav-link active" onclick="navigateTo('home'); return false;"><span class="nav-emoji">🏠</span><span class="nav-text">Home</span></a></li>
-                    <li class="nav-item"><a href="#productos" class="nav-link" onclick="navigateTo('productos'); return false;"><span class="nav-emoji">📦</span><span class="nav-text">Productos</span></a></li>
-                    <li class="nav-item"><a href="#clientes" class="nav-link" onclick="navigateTo('clientes'); return false;"><span class="nav-emoji">👥</span><span class="nav-text">Clientes</span></a></li>
-                    <li class="nav-item"><a href="#pedidos" class="nav-link" onclick="navigateTo('pedidos'); return false;"><span class="nav-emoji">📋</span><span class="nav-text">Pedidos</span></a></li>
-                    <li class="nav-item"><a href="#reportes" class="nav-link" onclick="navigateTo('reportes'); return false;"><span class="nav-emoji">📊</span><span class="nav-text">Reportes</span></a></li>
-                    <li class="nav-item admin-link" id="adminLink" style="display:none;">
-                        <a href="#admin" class="nav-link" onclick="navigateTo('admin'); return false;"><span class="nav-emoji">⚙️</span><span class="nav-text">Gestión de Usuarios</span></a>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" onclick="navigateTo('home'); return false;" data-icon="🏠">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="navigateTo('productos'); return false;" data-icon="📦">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="navigateTo('clientes'); return false;" data-icon="👥">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="navigateTo('pedidos'); return false;" data-icon="🛒">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="navigateTo('reportes'); return false;" data-icon="📊">Reportes</a>
+                    </li>
+                    <li class="nav-item" id="adminLink" style="display:none;">
+                        <a href="#" class="nav-link" onclick="navigateTo('admin'); return false;" data-icon="⚙️">Usuarios</a>
                     </li>
                 </ul>
             </nav>
         </aside>
 
         <div class="main-content">
-            <header class="header" id="header">
-                <div class="header-logo">G&M</div>
-                <div class="header-user">
-                    <span id="userName">Invitado</span>
+            
+            <header class="header" id="header" style="display: none;">
+                <div style="flex: 1;"></div> 
+                
+                <div class="header-logo">G&M</div> 
+                
+                <div class="header-user" style="flex: 1; justify-content: flex-end;">
+                    <span id="userName">Usuario</span>
                     <button class="logout-btn" onclick="logout()" title="Cerrar Sesión">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <i class="fas fa-sign-out-alt"></i>
                     </button>
                 </div>
             </header>
 
             <div class="content-area" id="contentArea">
-                <!-- El contenido se carga aquí dinámicamente -->
-            </div>
+                </div>
+
         </div>
     </div>
 
-    <div id="alerts-container"></div>
-
-    <script src="assets/js/app.js"></script>
     <script src="assets/js/router.js"></script>
     <script src="assets/js/pages/login.js"></script>
     <script src="assets/js/pages/productos.js"></script>
+    <script src="assets/js/pages/home.js"></script> 
+    
     <script>
+        // Verificar si hay sesión iniciada en LocalStorage
+        function checkAuth() {
+            const user = localStorage.getItem('user');
+            return user !== null;
+        }
+
+        // Función global de logout
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.reload();
+        }
+
+        // Al cargar la página, decidir qué mostrar
         document.addEventListener('DOMContentLoaded', function() {
-            const app = new App();
-            if (app.checkAuth()) {
+            if (checkAuth()) {
+                // --- USUARIO LOGUEADO ---
+                const user = JSON.parse(localStorage.getItem('user'));
+                
+                // Configurar Nombre y Rol en el Header
+                const displayText = user.role ? `${user.username} (${user.role})` : user.username;
+                document.getElementById('userName').textContent = displayText;
+                
+                // Mostrar interfaz principal
                 showAuthUI();
-                navigateTo('home');
+                
+                // Mostrar menú admin solo si corresponde
+                if (user.role === 'Admin') {
+                    document.getElementById('adminLink').style.display = 'flex'; // Usar flex para centrar en sidebar
+                }
+
+                // Cargar Home por defecto
+                navigateTo('home'); 
             } else {
+                // --- USUARIO NO LOGUEADO ---
                 hideAuthUI();
                 navigateTo('login');
             }

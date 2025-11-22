@@ -1,256 +1,275 @@
-<div style="display: none;" id="formContainer">
-    <div style="background: var(--header-bg); padding: 2rem; border-radius: 8px 8px 0 0; margin-bottom: 0;">
-        <h2 style="color: white; font-size: 1.3rem; margin: 0 0 0.5rem 0; font-weight: 700;">Registrar Nuevo Producto</h2>
-        <button onclick="hideProductForm()" style="background: none; border: none; color: #ffb84d; cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600;">Volver a la lista</button>
-    </div>
-    
-    <div style="background: white; padding: 2rem; border-radius: 0 0 8px 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-        <form id="addProductForm" onsubmit="handleProductSubmit(event)">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                <div>
-                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Nombre del Producto *</label>
-                    <input type="text" name="descripcion" placeholder="Nombre del producto" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-                </div>
-                <div>
-                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">SKU *</label>
-                    <input type="text" name="sku" placeholder="SKU único" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-                </div>
-                <div>
-                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Marca *</label>
-                    <select name="marca" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-                        <option value="">Seleccione una marca</option>
-                        <option value="DormiFlex">DormiFlex</option>
-                        <option value="OffiTop">OffiTop</option>
-                        <option value="CasaHome">CasaHome</option>
-                        <option value="MaderaVira">MaderaVira</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Categoría *</label>
-                    <select name="categoria" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-                        <option value="">Seleccione una categoría</option>
-                        <option value="Camas">Camas</option>
-                        <option value="Mesas">Mesas</option>
-                        <option value="Sillas">Sillas</option>
-                        <option value="Estantes">Estantes</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Precio (S/) *</label>
-                    <input type="number" name="precio" placeholder="0.00" step="0.01" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-                </div>
-                <div>
-                    <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">Stock Actual *</label>
-                    <input type="number" name="stockActual" placeholder="0" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem;">URL de la Imagen</label>
-                <input type="text" name="imagen" placeholder="https://ejemplo.com/imagen.jpg" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
-            </div>
+<style>
+    .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+    }
 
-            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                <button type="button" onclick="hideProductForm()" class="btn btn-secondary" style="padding: 0.75rem 2rem; font-weight: 600;">Cancelar</button>
-                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; font-weight: 600;">Guardar Producto</button>
-            </div>
-        </form>
-    </div>
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        /* CORRECCIÓN VISUAL: Altura mínima reservada */
+        min-height: 300px; 
+        /* Alineación al inicio para que el loader se centre bien arriba si es necesario */
+        align-content: start; 
+    }
+
+    /* Animación de entrada */
+    .product-card {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="page-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin: 0; letter-spacing: 1px;">Gestión de Productos</h1>
+    <button class="btn btn-white" onclick="showProductForm()" style="font-weight: 700; padding: 0.8rem 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        + Agregar Producto
+    </button>
 </div>
 
-<div id="listContainer">
-    <div class="page-header" style="margin-bottom: 1.5rem;">
-        <h1 style="color: var(--text-dark); font-size: 1.8rem; font-weight: 700; margin: 0;">Gestión de Productos</h1>
-        <button class="btn btn-primary" onclick="showProductForm()" style="font-weight: 600; padding: 0.75rem 1.5rem;">+ Agregar Producto</button>
+<div class="content-card">
+    
+    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre o SKU..." class="filter-input" onkeyup="filterProducts()" style="flex-grow: 1;">
+        
+        <button class="btn btn-secondary" onclick="toggleFilters()" style="white-space: nowrap; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-filter"></i> Filtrar
+        </button>
     </div>
 
-    <!-- Filtros -->
-    <div class="filter-controls" style="margin-bottom: 1.5rem;">
-        <input type="text" id="searchInput" placeholder="Buscar por nombre, SKU, marca..." class="filter-input" onkeyup="filterProducts()" style="flex-grow: 1;">
-        <select id="marcaFilter" class="filter-select" onchange="filterProducts()">
-            <option value="">Todas las Marcas</option>
-            <option value="DormiFlex">DormiFlex</option>
-            <option value="OffiTop">OffiTop</option>
-            <option value="CasaHome">CasaHome</option>
-            <option value="MaderaVira">MaderaVira</option>
+    <div id="filterContainer" class="filter-controls" style="display: none; margin-bottom: 1.5rem; background: #f8f9fa; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); animation: slideDown 0.3s ease-out;">
+        
+        <select id="proveedorFilter" class="filter-select" onchange="filterProducts()">
+            <option value="">Todos los Proveedores</option>
+            <option value="1">DormiFlex</option>
+            <option value="2">OffiTop</option>
+            <option value="3">CasaHome</option>
+            <option value="4">MaderaVira</option>
         </select>
+
         <select id="categoriaFilter" class="filter-select" onchange="filterProducts()">
             <option value="">Todas las Categorías</option>
-            <option value="Camas">Camas</option>
-            <option value="Mesas">Mesas</option>
-            <option value="Sillas">Sillas</option>
-            <option value="Estantes">Estantes</option>
+            <option value="1">Camas</option>
+            <option value="2">Mesas</option>
+            <option value="3">Sillas</option>
+            <option value="4">Estantes</option>
         </select>
+
         <select id="sortFilter" class="filter-select" onchange="filterProducts()">
-            <option value="name-asc">Ordenar por Nombre (A-Z)</option>
-            <option value="name-desc">Ordenar por Nombre (Z-A)</option>
-            <option value="price-asc">Ordenar por Precio (↓)</option>
-            <option value="price-desc">Ordenar por Precio (↑)</option>
-            <option value="stock-asc">Ordenar por Stock (↓)</option>
-            <option value="stock-desc">Ordenar por Stock (↑)</option>
+            <option value="name-asc">Nombre (A-Z)</option>
+            <option value="name-desc">Nombre (Z-A)</option>
+            <option value="price-asc">Precio (Menor a Mayor)</option>
+            <option value="price-desc">Precio (Mayor a Menor)</option>
+            <option value="stock-asc">Stock (Menor a Mayor)</option>
+            <option value="stock-desc">Stock (Mayor a Menor)</option>
         </select>
     </div>
 
-    <!-- Grid de Productos -->
-    <div class="content-card">
-        <div id="productCountHeader" style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 1.5rem;"></div>
-        <div class="product-grid" id="productosGrid">
+    <div id="productCountHeader" style="color: var(--text-secondary-gray); font-size: 0.9rem; margin-bottom: 1.5rem; height: 20px;"></div>
+    
+    <div class="product-grid" id="productosGrid">
+    </div>
+</div>
+
+<div style="display: none;" id="formContainer" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="color: white; font-size: 1.3rem; margin: 0; font-weight: 700;">Registrar Nuevo Producto</h2>
+            <button onclick="hideProductForm()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        
+        <div style="background: white; padding: 2rem; border-radius: 0 0 8px 8px;">
+            <form id="addProductForm" onsubmit="handleProductSubmit(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    
+                    <div>
+                        <label class="detail-label">Nombre del Producto *</label>
+                        <input type="text" id="nombre" placeholder="Ej: Cama King Size" required class="form-input">
+                    </div>
+                    
+                    <div>
+                        <label class="detail-label">SKU *</label>
+                        <input type="text" id="sku" placeholder="Ej: CAM-001" required class="form-input">
+                    </div>
+                    
+                    <div>
+                        <label class="detail-label">Proveedor *</label>
+                        <select id="id_proveedor" required class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">DormiFlex</option>
+                            <option value="2">OffiTop</option>
+                            <option value="3">CasaHome</option>
+                            <option value="4">MaderaVira</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="detail-label">Categoría *</label>
+                        <select id="id_categoria" required class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">Camas</option>
+                            <option value="2">Mesas</option>
+                            <option value="3">Sillas</option>
+                            <option value="4">Estantes</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="detail-label">Precio (S/) *</label>
+                        <input type="number" id="precio" placeholder="0.00" step="0.01" required class="form-input">
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label class="detail-label">Stock Inicial *</label>
+                            <input type="number" id="stock" placeholder="0" required class="form-input">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="detail-label">Stock Mínimo</label>
+                            <input type="number" id="stockMinimo" value="5" class="form-input">
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="detail-label">Descripción (Opcional)</label>
+                    <textarea id="descripcion" placeholder="Detalles del producto..." class="form-input" rows="2"></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="detail-label">Imagen del Producto</label>
+                    <div class="image-toggle-container">
+                        <label><input type="radio" name="imgSourceType" value="url" checked onchange="toggleImageInput('create', 'url')"> Enlace URL</label>
+                        <label><input type="radio" name="imgSourceType" value="file" onchange="toggleImageInput('create', 'file')"> Subir desde PC</label>
+                    </div>
+                    
+                    <input type="text" id="imagen" placeholder="https://..." class="form-input">
+                    <input type="file" id="imagenFile" class="form-input" style="display: none;" accept="image/*">
+                    <input type="hidden" id="imagenBase64">
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="hideProductForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<script>
-let allProductos = [];
-
-function loadProductosPage() {
-    loadProductos();
-}
-
-async function loadProductos() {
-    try {
-        const response = await fetch('http://localhost:8000/api/productos');
-        if (!response.ok) throw new Error('Error en servidor');
-        const data = await response.json();
-        allProductos = data;
-        filterProducts();
-    } catch (error) {
-        console.error('Error:', error);
-        // Datos de prueba local si no conecta al servidor
-        allProductos = [
-            { id: 1, descripcion: 'Cama King Size', sku: 'SKU001', marca: 'DormiFlex', categoria: 'Camas', precio: 1200.00, stockActual: 5, imagen: '' },
-            { id: 2, descripcion: 'Mesa de Comedor', sku: 'SKU002', marca: 'CasaHome', categoria: 'Mesas', precio: 350.00, stockActual: 8, imagen: '' },
-            { id: 3, descripcion: 'Silla de Oficina', sku: 'SKU003', marca: 'OffiTop', categoria: 'Sillas', precio: 180.00, stockActual: 12, imagen: '' }
-        ];
-        filterProducts();
-    }
-}
-
-function showProductForm() {
-    document.getElementById('formContainer').style.display = 'block';
-    document.getElementById('listContainer').style.display = 'none';
-    document.getElementById('addProductForm').reset();
-}
-
-function hideProductForm() {
-    document.getElementById('formContainer').style.display = 'none';
-    document.getElementById('listContainer').style.display = 'block';
-}
-
-function filterProducts() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const marca = document.getElementById('marcaFilter').value;
-    const categoria = document.getElementById('categoriaFilter').value;
-    const sort = document.getElementById('sortFilter').value;
-
-    let filtered = allProductos.filter(p => {
-        const matchSearch = !search || p.descripcion.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search) || p.marca.toLowerCase().includes(search);
-        const matchMarca = !marca || p.marca === marca;
-        const matchCategoria = !categoria || p.categoria === categoria;
-        return matchSearch && matchMarca && matchCategoria;
-    });
-
-    if (sort === 'name-asc') filtered.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
-    else if (sort === 'name-desc') filtered.sort((a, b) => b.descripcion.localeCompare(a.descripcion));
-    else if (sort === 'price-asc') filtered.sort((a, b) => a.precio - b.precio);
-    else if (sort === 'price-desc') filtered.sort((a, b) => b.precio - a.precio);
-    else if (sort === 'stock-asc') filtered.sort((a, b) => a.stockActual - b.stockActual);
-    else if (sort === 'stock-desc') filtered.sort((a, b) => b.stockActual - a.stockActual);
-
-    renderProductos(filtered);
-}
-
-function renderProductos(productos) {
-    const grid = document.getElementById('productosGrid');
-    const countHeader = document.getElementById('productCountHeader');
-    
-    countHeader.textContent = `Mostrando ${productos.length} productos`;
-    
-    if (productos.length === 0) {
-        grid.innerHTML = '<p style="color: var(--text-secondary-gray); text-align: center; padding: 2rem; grid-column: 1 / -1;">No hay productos que coincidan con los filtros</p>';
-        return;
-    }
-
-    grid.innerHTML = productos.map(p => `
-        <div class="product-card">
-            <div class="product-image" style="background: #f5f5f5; height: 200px; border-radius: 6px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: #999;">
-                ${p.imagen ? `<img src="${p.imagen}" style="max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 6px;">` : 'Sin imagen'}
-            </div>
-            <div class="product-info">
-                <p class="product-brand" style="color: var(--btn-primary-bg); font-size: 0.85rem; font-weight: 600; margin: 0 0 0.25rem 0;">${p.marca}</p>
-                <p class="product-sku" style="color: var(--text-secondary-gray); font-size: 0.8rem; margin: 0 0 0.5rem 0;">SKU: ${p.sku}</p>
-                <h3 class="product-name" style="color: var(--text-dark); font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0;">${p.descripcion}</h3>
-                <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <span class="product-stock" style="color: var(--text-secondary-gray); font-size: 0.9rem;">Stock: ${p.stockActual}</span>
-                    <span class="product-price" style="color: var(--btn-primary-bg); font-weight: 700; font-size: 1.1rem;">S/ ${p.precio.toFixed(2)}</span>
-                </div>
-                <div class="product-actions" style="display: flex; gap: 0.5rem;">
-                    <button onclick="editProduct(${p.id})" style="flex: 1; background: none; border: none; color: var(--btn-primary-bg); font-weight: 600; cursor: pointer; padding: 0.5rem; border-radius: 4px; font-size: 0.9rem;">Modificar</button>
-                    <button onclick="deleteProduct(${p.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 0.5rem; border-radius: 4px; font-size: 1.2rem;">🗑️</button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-async function handleProductSubmit(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
-    
-    const producto = {
-        descripcion: formData.get('descripcion'),
-        sku: formData.get('sku'),
-        marca: formData.get('marca'),
-        categoria: formData.get('categoria'),
-        precio: parseFloat(formData.get('precio')),
-        stockActual: parseInt(formData.get('stockActual')),
-        imagen: formData.get('imagen'),
-        codigoBarras: formData.get('sku'),
-        stockMinimo: 5,
-        fechaCreacion: new Date().toISOString()
-    };
-
-    try {
-        const response = await fetch('http://localhost:8000/api/productos', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(producto)
-        });
+<div style="display: none;" id="modalDetalle" class="modal-overlay">
+    <div class="modal-content" style="max-width: 900px;">
         
-        if (response.ok) {
-            showAlert('Producto agregado exitosamente', 'success');
-            hideProductForm();
-            loadProductos();
-        } else {
-            showAlert('Error al agregar el producto', 'danger');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        showAlert('Error al agregar el producto', 'danger');
-    }
-}
+        <div class="modal-header">
+            <h2 id="detalleTitulo" style="color: white; font-size: 1.5rem; margin: 0; font-weight: 700;">Detalles del Producto</h2>
+            <button onclick="closeDetalle()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        
+        <div style="background: white; padding: 2rem; border-radius: 0 0 8px 8px;">
+            <form id="editProductForm" onsubmit="handleUpdate(event)">
+                <input type="hidden" id="editId">
+                
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <label class="detail-label">Nombre</label>
+                            <input type="text" id="editNombre" class="form-input detail-input" disabled required>
+                        </div>
+                        <div>
+                            <label class="detail-label">Categoría</label>
+                            <select id="editCategoria" class="form-select detail-input" disabled>
+                                <option value="1">Camas</option>
+                                <option value="2">Mesas</option>
+                                <option value="3">Sillas</option>
+                                <option value="4">Estantes</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="detail-label">Proveedor</label>
+                            <select id="editProveedor" class="form-select detail-input" disabled>
+                                <option value="1">DormiFlex</option>
+                                <option value="2">OffiTop</option>
+                                <option value="3">CasaHome</option>
+                                <option value="4">MaderaVira</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="detail-label">SKU</label>
+                            <input type="text" id="editSku" class="form-input detail-input" disabled required>
+                        </div>
+                    </div>
 
-async function deleteProduct(id) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-        try {
-            const response = await fetch(`http://localhost:8000/api/productos/${id}`, { method: 'DELETE' });
-            if (response.ok) {
-                showAlert('Producto eliminado', 'success');
-                loadProductos();
-            } else {
-                showAlert('Error al eliminar', 'danger');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showAlert('Error al eliminar', 'danger');
-        }
-    }
-}
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label class="detail-label">Stock Actual</label>
+                                <input type="number" id="editStock" class="form-input" style="background: #e0e0e0; border: none; color: #555; text-align: center; cursor: not-allowed;" disabled title="Solo editable por inventario">
+                            </div>
+                            <div>
+                                <label class="detail-label">Stock Mín</label>
+                                <input type="number" id="editStockMin" class="form-input detail-input" disabled>
+                            </div>
+                            <div>
+                                <label class="detail-label">Precio</label>
+                                <input type="number" id="editPrecio" class="form-input detail-input" disabled>
+                            </div>
+                        </div>
 
-function editProduct(id) {
-    const producto = allProductos.find(p => p.id === id);
-    if (producto) {
-        showAlert('Edición de productos en desarrollo', 'info');
-    }
-}
-</script>
+                        <div style="flex-grow: 1;">
+                            <label class="detail-label">Descripción</label>
+                            <textarea id="editDescripcion" class="form-input detail-input" style="height: 100%; resize: none;" disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: end; justify-content: space-between; margin-top: 1rem;">
+                    
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                         <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 120px; height: 80px; border-radius: 8px; overflow: hidden; background: #eee; border: 1px solid #ddd;">
+                                <img id="editImgPreview" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            
+                            <div id="editImageControls" style="display: none; flex-direction: column; gap: 5px;">
+                                <div class="image-toggle-container">
+                                    <label><input type="radio" name="editImgSourceType" value="url" checked onchange="toggleImageInput('edit', 'url')"> URL</label>
+                                    <label><input type="radio" name="editImgSourceType" value="file" onchange="toggleImageInput('edit', 'file')"> PC</label>
+                                </div>
+                                <input type="text" id="editImagenUrlInput" placeholder="URL..." class="form-input" style="width: 200px; padding: 5px; font-size: 0.85rem;">
+                                <input type="file" id="editImagenFileInput" style="width: 200px; display:none;" accept="image/*">
+                                <input type="hidden" id="editImagenFinal">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        
+                        <div id="viewButtons" style="display: flex; gap: 1rem;">
+                            <button type="button" onclick="closeDetalle()" class="btn btn-primary" style="background: #1565C0; width: 100px;">Cerrar</button>
+                            <button type="button" onclick="enableEditMode()" class="btn btn-primary" style="width: 100px;">Editar</button>
+                            <button type="button" onclick="deleteFromModal()" style="background: #A63A3A; color: white; border: none; border-radius: 8px; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+
+                        <div id="editButtons" style="display: none; gap: 1rem;">
+                            <button type="button" onclick="cancelEditMode()" class="btn btn-secondary">Cancelar</button>
+                            <button type="submit" class="btn btn-success" style="background: #28a745; color: white; border: none;">Guardar Cambios</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

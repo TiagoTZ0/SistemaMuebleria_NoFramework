@@ -1,0 +1,11 @@
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Variables de Entorno (Contienen claves sensibles)
+.env
+
+# Archivos específicos del entorno local/SO
+start.bat
+# Puedes agregar archivos específicos de macOS o Linux si los tienes
+.DS_Store

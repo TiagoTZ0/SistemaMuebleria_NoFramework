@@ -57,7 +57,7 @@ function getProveedorName(id) {
     if (!id || parseInt(id) === 0) return 'N/A';
     
     const idNum = parseInt(id); 
-    if (isNaN(idNum)) return 'Desconocido';
+    if (isNaN(idNum) || idNum < 1 || idNum > 4) return 'Desconocido';
 
     switch(idNum) {
         case 1: return 'DormiFlex';
@@ -73,7 +73,7 @@ function getCategoriaName(id) {
     if (!id || parseInt(id) === 0) return 'N/A';
     
     const idNum = parseInt(id); 
-    if (isNaN(idNum)) return 'Desconocido';
+    if (isNaN(idNum) || idNum < 1 || idNum > 4) return 'Desconocido';
 
     switch(idNum) {
         case 1: return 'Camas';
@@ -84,7 +84,7 @@ function getCategoriaName(id) {
     }
 }
 
-// --- CARGA DE DATOS CON LOADER (CORRECCIÓN API) ---
+// --- CARGA DE DATOS CON LOADER ---
 async function loadProductos() {
     const grid = document.getElementById('productosGrid');
     const countHeader = document.getElementById('productCountHeader');
@@ -99,7 +99,7 @@ async function loadProductos() {
     countHeader.innerHTML = ''; 
 
     try {
-        // 🚨 CORRECCIÓN: USAMOS LA RUTA RELATIVA '/api/productos' en lugar de localhost
+        // 🚨 RUTA RELATIVA
         const response = await fetch('/api/productos'); 
         if (!response.ok) throw new Error('Error al conectar con la API del servidor');
         
@@ -204,7 +204,7 @@ function filterProducts() {
     renderProductos(filtered);
 }
 
-// --- CRUD functions (CORRECCIÓN API) ---
+// --- CRUD functions (CORRECCIÓN API y UX) ---
 
 function showProductForm() {
     document.getElementById('formContainer').style.display = 'flex';
@@ -218,41 +218,58 @@ function hideProductForm() {
 
 async function handleProductSubmit(event) {
     event.preventDefault();
-    
-    const imgType = document.querySelector('input[name="imgSourceType"]:checked').value;
-    let finalImage = "";
-    
-    if (imgType === 'url') {
-        finalImage = document.getElementById('imagen').value;
-    } else {
-        finalImage = document.getElementById('imagenBase64').value;
-    }
 
-    const producto = {
-        nombre: document.getElementById('nombre').value,
-        sku: document.getElementById('sku').value,
-        precio: parseFloat(document.getElementById('precio').value),
-        stock: parseInt(document.getElementById('stock').value),
-        stock_minimo: parseInt(document.getElementById('stockMinimo').value),
-        id_categoria: parseInt(document.getElementById('id_categoria').value),
-        id_proveedor: parseInt(document.getElementById('id_proveedor').value), // Correcto
-        descripcion: document.getElementById('descripcion').value,
-        imagen: finalImage
-    };
+    const saveButton = event.target.querySelector('button[type="submit"]');
+    const originalText = saveButton.innerHTML;
+    saveButton.disabled = true;
+    saveButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Guardando...`;
+    
+    // Recolección de datos...
 
     try {
+        const imgType = document.querySelector('input[name="imgSourceType"]:checked').value;
+        let finalImage = "";
+        
+        if (imgType === 'url') {
+            finalImage = document.getElementById('imagen').value;
+        } else {
+            finalImage = document.getElementById('imagenBase64').value;
+        }
+
+        const producto = {
+            nombre: document.getElementById('nombre').value,
+            sku: document.getElementById('sku').value,
+            precio: parseFloat(document.getElementById('precio').value),
+            stock: parseInt(document.getElementById('stock').value),
+            stock_minimo: parseInt(document.getElementById('stockMinimo').value),
+            id_categoria: parseInt(document.getElementById('id_categoria').value),
+            id_proveedor: parseInt(document.getElementById('id_proveedor').value),
+            descripcion: document.getElementById('descripcion').value,
+            imagen: finalImage
+        };
+        
         // 🚨 CORRECCIÓN: USAMOS RUTA RELATIVA
         const response = await fetch('/api/productos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(producto)
         });
+
         if (response.ok) {
-            alert('Producto creado');
+            alert('Producto creado correctamente.');
             hideProductForm();
             loadProductos();
-        } else { alert("Error al guardar"); }
-    } catch (error) { console.error(error); }
+        } else { 
+            const errorText = await response.text();
+            alert(`Error al crear (Código ${response.status}): ${errorText}`);
+        }
+    } catch (error) { 
+        console.error('API Error en POST:', error);
+        alert("Error de red: No se pudo completar la solicitud de creación.");
+    } finally {
+        saveButton.disabled = false;
+        saveButton.innerHTML = originalText;
+    }
 }
 
 function openProductDetail(id) {
@@ -309,42 +326,68 @@ function setEditMode(isEditing) {
     document.getElementById('editImageControls').style.display = isEditing ? 'flex' : 'none';
 }
 
+// 🎯 FUNCIÓN CRÍTICA: handleUpdate (CORREGIDA)
 async function handleUpdate(e) {
     e.preventDefault();
+
+    const saveButton = e.target.querySelector('button[type="submit"]');
+    const originalText = saveButton.innerHTML;
+    saveButton.disabled = true;
+    saveButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Guardando...`;
     
-    const imgType = document.querySelector('input[name="editImgSourceType"]:checked').value;
-    let finalImg = document.getElementById('editImagenFinal').value;
-    
-    if (imgType === 'url') {
-        const urlVal = document.getElementById('editImagenUrlInput').value;
-        if(urlVal) finalImg = urlVal;
+    if (!currentEditId) {
+        alert("Error de sistema: No se detectó un ID de producto para actualizar.");
+        saveButton.disabled = false;
+        saveButton.innerHTML = originalText;
+        return;
     }
-
-    const data = {
-        nombre: document.getElementById('editNombre').value,
-        sku: document.getElementById('editSku').value,
-        id_categoria: parseInt(document.getElementById('editCategoria').value),
-        id_proveedor: parseInt(document.getElementById('editProveedor').value), // Correcto
-        precio: parseFloat(document.getElementById('editPrecio').value),
-        stock: parseInt(document.getElementById('editStock').value), 
-        stock_minimo: parseInt(document.getElementById('editStockMin').value),
-        descripcion: document.getElementById('editDescripcion').value,
-        imagen: finalImage
-    };
-
+    
     try {
+        const imgType = document.querySelector('input[name="editImgSourceType"]:checked').value;
+        let finalImg = document.getElementById('editImagenFinal').value;
+        
+        if (imgType === 'url') {
+            const urlVal = document.getElementById('editImagenUrlInput').value;
+            if(urlVal) finalImg = urlVal;
+        }
+
+        const data = {
+            nombre: document.getElementById('editNombre').value,
+            sku: document.getElementById('editSku').value,
+            id_categoria: parseInt(document.getElementById('editCategoria').value),
+            id_proveedor: parseInt(document.getElementById('editProveedor').value), 
+            precio: parseFloat(document.getElementById('editPrecio').value),
+            // Stock solo se envía, no se actualiza en este formulario de edición
+            stock: parseInt(document.getElementById('editStock').value), 
+            stock_minimo: parseInt(document.getElementById('editStockMin').value),
+            descripcion: document.getElementById('editDescripcion').value,
+            imagen: finalImg
+        };
+
         // 🚨 CORRECCIÓN: USAMOS RUTA RELATIVA
         const res = await fetch(`/api/productos/${currentEditId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
+        
         if (res.ok) {
-            alert("Actualizado correctamente");
+            alert("Producto actualizado correctamente.");
             closeDetalle();
             loadProductos();
-        } else { alert("Error al actualizar"); }
-    } catch (error) { console.error(error); }
+        } else { 
+            // Esto captura el error 400, 404, 500 del servidor
+            const errorText = await res.text();
+            alert(`Error ${res.status} al actualizar: ${errorText || 'Error de servidor desconocido.'}`);
+        }
+    } catch (error) { 
+        console.error('API Error en PUT:', error);
+        alert("Error de red: No se pudo completar la solicitud.");
+    } finally {
+        // 5. RESTAURAR SIEMPRE EL BOTÓN
+        saveButton.disabled = false;
+        saveButton.innerHTML = originalText;
+    }
 }
 
 async function deleteFromModal() {

@@ -16,15 +16,12 @@ window.navigateTo = async function(page) {
 async function loadPage(page) {
     const user = localStorage.getItem('user');
     
-    // Lista de páginas PÚBLICAS que no requieren autenticación (Login y Register)
     const publicPages = ['login', 'register'];
 
-    // 1. Protección de Rutas: Si no hay usuario, forzar a Login, A MENOS que intente ir a Register.
     if (!publicPages.includes(page) && !user) {
         page = 'login'; 
     }
     
-    // 2. Si hay usuario y quiere ir a login o register, mandarlo a Home.
     if (publicPages.includes(page) && user) {
         page = 'home';  
     }
@@ -37,21 +34,17 @@ async function loadPage(page) {
         const contentArea = document.getElementById('contentArea');
         contentArea.innerHTML = html;
 
-        // Manejo de la UI (Ocultar barras en páginas públicas)
         if (publicPages.includes(page)) {
             document.getElementById('sidebar').style.display = 'none';
             document.getElementById('header').style.display = 'none';
         } else {
-            // Asegurar que se vean si ya entró
             document.getElementById('sidebar').style.display = 'flex';
             document.getElementById('header').style.display = 'flex';
             setActiveNav(page);
         }
 
-        // Ejecutar scripts incrustados en el HTML cargado
         executeScripts(contentArea);
 
-        // Ejecutar inicializadores globales (ej: loadProductosPage)
         const scriptName = `load${capitalize(page)}Page`;
         if (typeof window[scriptName] === 'function') {
             window[scriptName]();
@@ -62,7 +55,6 @@ async function loadPage(page) {
     }
 }
 
-// Función vital para que funcionen los scripts dentro de las páginas cargadas
 function executeScripts(container) {
     const scripts = container.querySelectorAll("script");
     scripts.forEach((oldScript) => {

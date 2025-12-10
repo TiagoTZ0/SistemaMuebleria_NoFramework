@@ -1,13 +1,11 @@
 let allProductos = [];
 let currentEditId = null;
 
-// Inicialización
 function loadProductosPage() {
     loadProductos();
     setupImageListeners();
 }
 
-// Configurar listeners, etc.
 function setupImageListeners() {
     const createInput = document.getElementById('imagenFile');
     if(createInput) {
@@ -24,7 +22,6 @@ function setupImageListeners() {
     }
 }
 
-// Convertir Archivo a Base64
 function handleFileSelect(event, hiddenInputId, previewImgId = null) {
     const file = event.target.files[0];
     if (file) {
@@ -38,7 +35,6 @@ function handleFileSelect(event, hiddenInputId, previewImgId = null) {
     }
 }
 
-// Alternar entre URL y Archivo
 function toggleImageInput(context, type) {
     const urlInput = document.getElementById(context === 'create' ? 'imagen' : 'editImagenUrlInput');
     const fileInput = document.getElementById(context === 'create' ? 'imagenFile' : 'editImagenFileInput');
@@ -52,7 +48,6 @@ function toggleImageInput(context, type) {
     }
 }
 
-// 📌 Mapeo de Proveedor 
 function getProveedorName(id) {
     if (!id || parseInt(id) === 0) return 'N/A';
     
@@ -68,7 +63,6 @@ function getProveedorName(id) {
     }
 }
 
-// 📌 Mapeo de Categoría 
 function getCategoriaName(id) {
     if (!id || parseInt(id) === 0) return 'N/A';
     
@@ -84,12 +78,10 @@ function getCategoriaName(id) {
     }
 }
 
-// --- CARGA DE DATOS CON LOADER ---
 async function loadProductos() {
     const grid = document.getElementById('productosGrid');
     const countHeader = document.getElementById('productCountHeader');
 
-    // MOSTRAR LOADER INMEDIATAMENTE
     grid.innerHTML = `
         <div style="grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; color: #666; height: 100%;">
             <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 1rem; color: #0d6efd;"></i>
@@ -109,7 +101,7 @@ async function loadProductos() {
         filterProducts(); 
 
     } catch (error) {
-        console.error('❌ Error:', error);
+        console.error(error);
         allProductos = []; 
         
         grid.innerHTML = `
@@ -125,7 +117,6 @@ async function loadProductos() {
     }
 }
 
-// --- LÓGICA VISUAL Y FILTROS ---
 function toggleFilters() {
     const container = document.getElementById('filterContainer');
     container.style.display = (container.style.display === 'none' || container.style.display === '') ? 'flex' : 'none';
@@ -204,8 +195,6 @@ function filterProducts() {
     renderProductos(filtered);
 }
 
-// --- CRUD functions (CORRECCIÓN API y UX) ---
-
 function showProductForm() {
     document.getElementById('formContainer').style.display = 'flex';
     document.getElementById('addProductForm').reset();
@@ -223,8 +212,6 @@ async function handleProductSubmit(event) {
     const originalText = saveButton.innerHTML;
     saveButton.disabled = true;
     saveButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Guardando...`;
-    
-    // Recolección de datos...
 
     try {
         const imgType = document.querySelector('input[name="imgSourceType"]:checked').value;
@@ -248,7 +235,6 @@ async function handleProductSubmit(event) {
             imagen: finalImage
         };
         
-        // USAMOS RUTA RELATIVA
         const response = await fetch('/api/productos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -286,11 +272,9 @@ function openProductDetail(id) {
     document.getElementById('editStockMin').value = p.stock_minimo || 5;
     document.getElementById('editDescripcion').value = p.descripcion || '';
     
-    // Usamos las propiedades correctas del objeto de producto: p.categoria_id y p.id_proveedor
     if(p.categoria_id) document.getElementById('editCategoria').value = p.categoria_id;
     if(p.id_proveedor) document.getElementById('editProveedor').value = p.id_proveedor;
 
-    // Imagen
     const currentImg = p.imagen || '';
     document.getElementById('editImagenFinal').value = currentImg;
     document.getElementById('editImagenUrlInput').value = currentImg.startsWith('data:') ? '' : currentImg;
@@ -326,7 +310,6 @@ function setEditMode(isEditing) {
     document.getElementById('editImageControls').style.display = isEditing ? 'flex' : 'none';
 }
 
-// 🎯 FUNCIÓN CRÍTICA: handleUpdate 
 async function handleUpdate(e) {
     e.preventDefault();
 
@@ -357,14 +340,12 @@ async function handleUpdate(e) {
             id_categoria: parseInt(document.getElementById('editCategoria').value),
             id_proveedor: parseInt(document.getElementById('editProveedor').value), 
             precio: parseFloat(document.getElementById('editPrecio').value),
-            // Stock solo se envía, no se actualiza en este formulario de edición
             stock: parseInt(document.getElementById('editStock').value), 
             stock_minimo: parseInt(document.getElementById('editStockMin').value),
             descripcion: document.getElementById('editDescripcion').value,
             imagen: finalImg
         };
 
-        // 🚨 USAMOS RUTA RELATIVA
         const res = await fetch(`/api/productos/${currentEditId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -376,7 +357,6 @@ async function handleUpdate(e) {
             closeDetalle();
             loadProductos();
         } else { 
-            // Esto captura el error 400, 404, 500 del servidor
             const errorText = await res.text();
             alert(`Error ${res.status} al actualizar: ${errorText || 'Error de servidor desconocido.'}`);
         }
@@ -384,7 +364,6 @@ async function handleUpdate(e) {
         console.error('API Error en PUT:', error);
         alert("Error de red: No se pudo completar la solicitud.");
     } finally {
-        // 5. RESTAURAR SIEMPRE EL BOTÓN
         saveButton.disabled = false;
         saveButton.innerHTML = originalText;
     }
@@ -393,7 +372,6 @@ async function handleUpdate(e) {
 async function deleteFromModal() {
     if(!confirm("¿Estás seguro? Esta acción no se puede deshacer.")) return;
     try {
-        // RUTA RELATIVA
         const res = await fetch(`/api/productos/${currentEditId}`, { method: 'DELETE' });
         if (res.ok) {
             alert("Eliminado");

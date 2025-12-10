@@ -1,4 +1,3 @@
-/* Sistema Global de la Aplicación */
 const API_URL = '/api';
 
 class App {
@@ -47,7 +46,6 @@ class App {
 
 const app = new App();
 
-// Funciones globales
 function navigateTo(page) {
     loadPage(page);
 }
@@ -58,7 +56,6 @@ function logout() {
     }
 }
 
-// Utility para fetch
 async function fetchAPI(endpoint, options = {}) {
     try {
         const response = await fetch(`${API_URL}${endpoint}`, {
@@ -81,7 +78,6 @@ async function fetchAPI(endpoint, options = {}) {
     }
 }
 
-// Mostrar alertas
 function showAlert(message, type = 'info') {
     const container = document.getElementById('alerts-container') || document.body;
     const alert = document.createElement('div');
@@ -101,7 +97,6 @@ function showAlert(message, type = 'info') {
     setTimeout(() => alert.remove(), 5000);
 }
 
-// Actualizar link activo
 function setActiveNav(page) {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('active');

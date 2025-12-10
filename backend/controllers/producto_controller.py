@@ -1,5 +1,6 @@
 from database import get_connection
 
+
 def obtener_productos():
     conn = get_connection()
     if not conn:
@@ -7,7 +8,6 @@ def obtener_productos():
     
     cursor = conn.cursor()
     
-    # ACTUALIZADO: Añadimos id_proveedor a la consulta
     query = """
         SELECT p.id_producto, p.nombre, p.sku, p.precio_unitario, p.stock, 
                 p.imagen_url, c.nombre as categoria_nombre, 
@@ -31,11 +31,10 @@ def obtener_productos():
                 "stock": row[4],
                 "imagen": row[5],
                 "categoria": row[6] if row[6] else "Sin Categoría",
-                # Campos de edición/filtro:
                 "descripcion": row[7],
                 "stock_minimo": row[8],
-                "categoria_id": row[9],   # Usado para precargar select en modal y filtrar
-                "id_proveedor": row[10]   # <--- AÑADIDO PARA FILTRO/EDICIÓN
+                "categoria_id": row[9],
+                "id_proveedor": row[10]
             })
         return productos
         
@@ -46,16 +45,15 @@ def obtener_productos():
         conn.close()
 
 def crear_producto(data):
-# ... (El resto del código de crear_producto se mantiene igual)
     conn = get_connection()
     if not conn:
         return False
     
     cursor = conn.cursor()
     try:
-        # ACTUALIZADO: Incluye descripción
         query = """
-            INSERT INTO "Producto" (nombre, sku, id_categoria, precio_unitario, stock, stock_minimo, imagen_url, descripcion, id_proveedor)
+            INSERT INTO "Producto" (nombre, sku, id_categoria, precio_unitario, stock, 
+                                   stock_minimo, imagen_url, descripcion, id_proveedor)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         
@@ -82,7 +80,6 @@ def crear_producto(data):
         conn.close()
 
 def actualizar_producto(id_producto, data):
-# ... (El resto del código de actualizar_producto se mantiene igual)
     conn = get_connection()
     if not conn:
         return False
@@ -125,11 +122,10 @@ def actualizar_producto(id_producto, data):
         conn.close()
 
 def eliminar_producto(id_producto):
-# ... (El resto del código de eliminar_producto se mantiene igual)
     conn = get_connection()
     if not conn:
         return False
-        
+    
     cursor = conn.cursor()
     try:
         cursor.execute('DELETE FROM "Producto" WHERE id_producto = %s', (id_producto,))

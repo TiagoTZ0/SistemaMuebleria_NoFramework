@@ -6,9 +6,6 @@ load_dotenv()
 
 def get_connection():
     try:
-        # Imprimir para depurar (solo mientras arreglamos el error)
-        print(f"Conectando a: {os.environ.get('SUPABASE_HOST')}")
-        
         conn = psycopg2.connect(
             host=os.environ.get("SUPABASE_HOST"),
             database="postgres",
